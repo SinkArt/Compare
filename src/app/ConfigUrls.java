@@ -11,12 +11,12 @@ public final class ConfigUrls {
 
     static {
         Map<String, String> map = new LinkedHashMap<>();
-        map.put("BASE_CONFIG", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.9/configs/stable/_shared_configs/base/minor_configs_version/base.json");
-        map.put("BRAND_CONFIG", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.9/configs/stable/brand_configs/minor_configs_version/brand.json");
-        map.put("ENV_CONFIG", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.9/configs/stable/brand_configs/minor_configs_version/horizon.json");
-        map.put("CONTENT_JSON", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.9/configs/stable/brand_configs/minor_configs_version/content.json");
-        map.put("SHARED_TRANSLATIONS", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.9/configs/stable/_shared_configs/translations/en.json");
-        map.put("BRANDED_TRANSLATIONS", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.9/configs/stable/brand_configs/minor_configs_version/translations/en.json");
+        map.put("BASE_CONFIG", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.3/configs/stable/_shared_configs/base/minor_configs_version/base.json");
+        map.put("BRAND_CONFIG", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.3/configs/stable/brand_configs/minor_configs_version/brand.json");
+        map.put("ENV_CONFIG", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.3/configs/stable/brand_configs/minor_configs_version/horizon.json");
+        map.put("CONTENT_JSON", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.3/configs/stable/brand_configs/minor_configs_version/content.json");
+        map.put("SHARED_TRANSLATIONS", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.3/configs/stable/_shared_configs/translations/en.json");
+        map.put("BRANDED_TRANSLATIONS", "https://ua-mob-native-uat.playtechgaming.com/UAT/WhiteLabel/25.3/configs/stable/brand_configs/minor_configs_version/translations/en.json");
 
         // Перетворюємо на незмінну мапу
         URL_MAP = Collections.unmodifiableMap(map);

@@ -1,11 +1,10 @@
 package app;
 
-import com.flipkart.zjsonpatch.JsonDiff;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.JsonProcessingException;
-// Імпорт нової бібліотеки
-
+import com.flipkart.zjsonpatch.JsonDiff;
+import com.flipkart.zjsonpatch.JsonPatch;
 public class JsonComparator {
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -21,31 +20,29 @@ public class JsonComparator {
             return;
         }
 
-        System.out.println("\n[>>>] Конфіг " + name + ": Виявлено зміни (JSON-Patch):");
+        System.out.println("\n[>>>] Конфіг " + name + ": Виявлено зміни (JSON-Patch Google):");
 
         try {
-            // Перетворюємо JSON-рядки на JsonNode
             JsonNode prevNode = mapper.readTree(previousJson);
             JsonNode currNode = mapper.readTree(currentJson);
 
-            // ГЕНЕРАЦІЯ DIFF: Використовуємо JsonDiff для отримання масиву операцій
-            JsonNode diff = JsonDiff.asJson(prevNode, currNode);
+            // ГЕНЕРАЦІЯ DIFF: використовуємо JsonDiff.asJson() від Google
+            JsonNode diffArray = JsonDiff.asJson(prevNode, currNode);
 
-            if (diff.isArray() && diff.size() > 0) {
+            if (diffArray.isArray() && diffArray.size() > 0) {
                 System.out.printf("--- ЗМІНИ У КОНФІГУ %s ---\n", name);
 
                 // Проходимо по кожній операції patch
-                for (JsonNode operation : diff) {
-                    String op = operation.get("op").asText(); // 'add', 'remove', 'replace', 'move'
-                    String path = operation.get("path").asText(); // Шлях до зміненого елемента
+                for (JsonNode operation : diffArray) {
+                    String op = operation.get("op").asText();
+                    String path = operation.get("path").asText();
 
                     String valueInfo = "";
                     if (operation.has("value")) {
-                        valueInfo = " Значення: " + operation.get("value").toString();
+                        valueInfo = " Нове значення: " + operation.get("value").toString();
                     }
                     if (operation.has("from")) {
-                        // Це трапляється при 'move' (переміщенні)
-                        valueInfo += " (З: " + operation.get("from").asText() + ")";
+                        valueInfo += " (Зі шляху: " + operation.get("from").asText() + ")";
                     }
 
                     // Виведення у форматі, схожому на Git
@@ -54,16 +51,13 @@ public class JsonComparator {
                             System.out.printf("  + ДОДАНО:   Шлях: %s,%s\n", path, valueInfo);
                             break;
                         case "remove":
-                            // Для видалення значення часто відсутнє, але path завжди є
                             System.out.printf("  - ВИДАЛЕНО: Шлях: %s\n", path);
                             break;
                         case "replace":
-                            // 'replace' означає зміну значення
-                            System.out.printf("  ~ ЗМІНЕНО:  Шлях: %s, Нове%s\n", path, valueInfo);
+                            System.out.printf("  ~ ЗМІНЕНО:  Шлях: %s,%s\n", path, valueInfo);
                             break;
                         case "move":
-                            // 'move' означає переміщення елемента масиву, що тепер коректно обробляється!
-                            System.out.printf("  < ПЕРЕМІЩЕНО: Шлях: %s, Зі шляху: %s\n", path, operation.get("from").asText());
+                            System.out.printf("  < ПЕРЕМІЩЕНО: Шлях: %s%s\n", path, valueInfo);
                             break;
                         default:
                             System.out.printf("  ? ІНШЕ:    %s, Шлях: %s\n", op, path);
@@ -71,7 +65,7 @@ public class JsonComparator {
                 }
                 System.out.println("------------------------------------");
             } else {
-                System.out.println("[OK] Зміни виявлено, але JsonDiff не знайшов коректних операцій.");
+                System.out.println("[Помилка Diff] Зміни виявлено, але JsonDiff не знайшов операцій.");
             }
 
         } catch (JsonProcessingException e) {
